@@ -1,3 +1,4 @@
+import os
 import secrets
 import asyncpg
 import io
@@ -5,11 +6,14 @@ from io import BytesIO
 from PIL import Image
 from typing import List
 from aiogram import Bot, types
+from aiogram.contrib.fsm_storage.memory import MemoryStorage
 from aiogram.dispatcher import Dispatcher
 from telegramBotDjango.settings import BOT_KEY, DATABASES
 
+
+
 bot = Bot(token=BOT_KEY)
-dp = Dispatcher(bot)
+dp = Dispatcher(bot, storage=MemoryStorage(), loop=bot.loop)
 
 
 async def connect_to_db():
@@ -28,7 +32,7 @@ async def save_user_data(user_data):
 
     try:
         await conn.execute(
-            'INSERT INTO tgbot_manage_telegramuser (id, username, first_name, last_name, password, photo) '
+            'INSERT INTO telegramBot_telegramuser (id, username, first_name, last_name, password, photo) '
             'VALUES ($1, $2, $3, $4, $5, $6)',
             user_data['id'],
             user_data['username'],
@@ -63,7 +67,7 @@ async def process_registration_command(msg: types.Message):
 
     try:
         result = await conn.fetchrow(
-            'SELECT id FROM tgbot_manage_telegramuser WHERE id = $1',
+            'SELECT id FROM telegramBot_telegramuser WHERE id = $1',
             msg.from_user.id
         )
         if result:
@@ -115,10 +119,10 @@ async def delete_user_from_db(msg: types.Message):
     try:
         user_id = msg.from_user.id
         # перевіряємо, чи існує користувач з вказаним id
-        res = await conn.fetch('SELECT * FROM tgbot_manage_telegramuser WHERE id = $1', user_id)
+        res = await conn.fetch('SELECT * FROM telegramBot_telegramuser WHERE id = $1', user_id)
         if res:
             # якщо користувач існує, то видаляємо його з бази даних
-            await conn.execute('DELETE FROM tgbot_manage_telegramuser WHERE id = $1', user_id)
+            await conn.execute('DELETE FROM telegramBot_telegramuser WHERE id = $1', user_id)
             await msg.answer('Ти успішно видалений')
         else:
             # якщо користувач не існує, повідомляємо про це

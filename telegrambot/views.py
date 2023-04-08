@@ -12,8 +12,6 @@ def login_view(request):
         print(username, password)
         url_user_tg_account = f"https://t.me/{username}"
 
-        print(username, data_of_users.get(username=username).username)
-
         if username in data_of_users.get(username=username).username:
             data_of_user = data_of_users.get(username=username)
             print(data_of_user)
@@ -27,9 +25,12 @@ def login_view(request):
                 }
 
                 return render(request, "index.html", context=context)
-
-        error_contex = {
+        else:
+            error_contex = {
                 "errors": "Invalid credentials"
             }
 
-        return render(request, "login.html", context=error_contex)
+            return render(request, "login.html", context=error_contex)
+
+def base_view(request):
+    return render(request, 'base.html')

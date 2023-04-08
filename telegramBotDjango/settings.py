@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'telegramBot',
+    'telegrambot',
     'crispy_forms',
 ]
 
@@ -70,7 +70,7 @@ DATABASES = {
 }
 
 
-WSGI_APPLICATION = 'django-telegrambot.wsgi.application'
+WSGI_APPLICATION = 'telegramBotDjango.wsgi.application'
 
 AUTH_PASSWORD_VALIDATORS = [
     {
