@@ -5,7 +5,7 @@ asgiref==3.5.2
 async-timeout==4.0.2
 attrs==22.1.0
 Babel==2.9.1
-certifi==2020.11.8
+certifi==2021.11.8
 charset-normalizer==2.0.12
 Django==3.2.15
 django-crispy-forms==1.14.0
