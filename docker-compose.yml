@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 13042004
+      POSTGRES_DB: tebteam
+    volumes:
+      - db-data:/var/lib/postgresql/data/
+
+  web:
+    build: .
+    command: gunicorn telegramBotDjango.wsgi:application --bind 0.0.0.0:8080
+    volumes:
+      - .:/app
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    environment:
+      POSTGRES_HOST: db
+
+  aiogram:
+    build: .
+    command: python manage.py bot_start
+    volumes:
+      - .:/app
+    depends_on:
+      - db
+    environment:
+      POSTGRES_HOST: db
+
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+    ports:
+      - 80:80
+    depends_on:
+      - web
+
+volumes:
+  db-data:
+  static_volume:
